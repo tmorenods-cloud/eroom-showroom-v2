@@ -19,13 +19,15 @@
   /* Fondo degradado radial del footer */
   --color-footer-1: #04133d;
   --color-footer-2: #001145;
-  --color-footer-3: #0a1331;
   --color-footer-4: #13161e;
   --color-footer-text: #d6d6fa;
 
   /* Overlay oscuro sobre la imagen de cada tarjeta al interactuar */
   --color-card-shade: #0c162b;
   --color-card-shade-via: rgb(13 22 38 / 0.54);
+
+  /* Fondo base del body */
+  --color-body-bg: #13161e;
 
   /* Texto e interacción */
   --color-ink: #202020;
@@ -42,7 +44,7 @@ html {
 }
 
 body {
-  background: var(--color-header-to);
+  background: var(--color-body-bg);
   color: white;
   font-family: var(--font-sans);
 }
