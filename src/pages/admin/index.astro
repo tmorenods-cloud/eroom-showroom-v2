@@ -1,0 +1,53 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import { getAllProducts } from "../../data/products";
+
+export const prerender = false;
+
+const productos = await getAllProducts();
+const categoriaLabel: Record<string, string> = {
+  hotelero: "Hoteleros",
+  huesped: "Huéspedes",
+};
+---
+
+<BaseLayout title="Panel admin — eRoom Suite">
+  <main class="mx-auto flex max-w-3xl flex-col gap-8 px-6 py-16">
+    <div class="flex items-center justify-between">
+      <div class="flex flex-col gap-2">
+        <img src="/svg/eRoom-SUITE-logotype.svg" alt="eRoom Suite" class="h-8 w-auto" />
+        <h1 class="text-2xl font-medium text-white">Panel admin</h1>
+      </div>
+      <form method="POST" action="/api/admin/logout">
+        <button type="submit" class="text-sm text-footer-text underline underline-offset-2">
+          Salir
+        </button>
+      </form>
+    </div>
+
+    <p class="text-sm text-footer-text">
+      Editá el título, la descripción, los enlaces de demo y los botones de PDF/Video de cada
+      tarjeta. Los cambios se ven en la web al instante, sin redeploy.
+    </p>
+
+    <ul class="flex flex-col divide-y divide-white/10 rounded-card border border-white/10">
+      {
+        productos.map((p) => (
+          <li class="flex items-center justify-between gap-4 px-5 py-4">
+            <div class="flex flex-col gap-1">
+              <p class="text-white">{p.titulo}</p>
+              <p class="text-sm text-footer-text">
+                {categoriaLabel[p.categoria] ?? p.categoria} · {p.demos.length} demo(s)
+                {p.pdfUrl ? " · PDF" : ""}
+                {p.videoUrl ? " · Video" : ""}
+              </p>
+            </div>
+            <a href={`/admin/productos/${p.id}`} class="shrink-0 text-link-active">
+              Editar →
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+  </main>
+</BaseLayout>

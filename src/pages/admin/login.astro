@@ -1,0 +1,38 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+
+export const prerender = false;
+
+const hasError = Astro.url.searchParams.has("error");
+---
+
+<BaseLayout title="Ingresar — Admin eRoom Suite">
+  <main class="mx-auto flex min-h-screen max-w-sm flex-col justify-center gap-8 px-6">
+    <div class="flex flex-col gap-2">
+      <img src="/svg/eRoom-SUITE-logotype.svg" alt="eRoom Suite" class="h-8 w-auto" />
+      <h1 class="text-2xl font-medium text-white">Panel admin</h1>
+    </div>
+
+    <form method="POST" action="/api/admin/login" class="flex flex-col gap-4">
+      <label class="flex flex-col gap-2 text-sm text-white">
+        Password
+        <input
+          type="password"
+          name="password"
+          required
+          autofocus
+          class="rounded-pill-inner border border-white/15 bg-white/5 px-4 py-3 text-white outline-none focus:border-white/40"
+        />
+      </label>
+
+      {hasError && <p class="text-sm text-red-400">Password incorrecto. Probá de nuevo.</p>}
+
+      <button
+        type="submit"
+        class="rounded-pill-inner bg-white px-4 py-3 text-center font-medium text-ink"
+      >
+        Entrar
+      </button>
+    </form>
+  </main>
+</BaseLayout>

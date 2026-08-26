@@ -7,8 +7,14 @@ import ProductCard from "../components/ProductCard.tsx";
 import VideoModal from "../components/VideoModal.tsx";
 import { getProductsByCategoria } from "../data/products";
 
-const hoteleros = getProductsByCategoria("hotelero");
-const huespedes = getProductsByCategoria("huesped");
+// El contenido vive en Postgres y se edita desde /admin — sin esto, un
+// cambio en el admin no se vería hasta el próximo build.
+export const prerender = false;
+
+const [hoteleros, huespedes] = await Promise.all([
+  getProductsByCategoria("hotelero"),
+  getProductsByCategoria("huesped"),
+]);
 ---
 
 <BaseLayout title="eRoom Suite — Showroom">
