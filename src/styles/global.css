@@ -1,0 +1,48 @@
+@import "tailwindcss";
+/* @font-face de Aspekta se referencia como <link> plano en BaseLayout.astro
+   en vez de @import aquí: procesar public/fonts/font-face.css a través de
+   Vite/PostCSS reescribe sus url() relativas a una ruta /public/... que no
+   existe en el sitio servido. Un <link> deja el CSS intacto. */
+/*
+ * Design tokens — extraídos de Figma (fileKey HNFYCrcZXAX6GVUEmwlzWb)
+ * Único punto de verdad para color/tipografía/radios. No hardcodear valores
+ * nuevos en los componentes: si falta un token, agregarlo aquí primero.
+ */
+@theme {
+  --font-sans: "Aspekta", ui-sans-serif, system-ui, sans-serif;
+
+  /* Fondo degradado del header */
+  --color-header-from: #13161e;
+  --color-header-via: #0b1536;
+  --color-header-to: #051748;
+
+  /* Fondo degradado radial del footer */
+  --color-footer-1: #04133d;
+  --color-footer-2: #001145;
+  --color-footer-3: #0a1331;
+  --color-footer-4: #13161e;
+  --color-footer-text: #d6d6fa;
+
+  /* Overlay oscuro sobre la imagen de cada tarjeta al interactuar */
+  --color-card-shade: #0c162b;
+  --color-card-shade-via: rgb(13 22 38 / 0.54);
+
+  /* Texto e interacción */
+  --color-ink: #202020;
+  --color-link: #06f;
+  --color-link-active: #0059ff;
+
+  --radius-card: 8px;
+  --radius-pill-outer: 16px;
+  --radius-pill-inner: 12px;
+}
+
+html {
+  color-scheme: dark;
+}
+
+body {
+  background: var(--color-header-to);
+  color: white;
+  font-family: var(--font-sans);
+}

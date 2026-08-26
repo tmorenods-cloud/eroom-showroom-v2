@@ -1,0 +1,249 @@
+{
+  "_fuente": "Contenido combinado: copy (titulo/descripcion) extraido de Figma (fileKey HNFYCrcZXAX6GVUEmwlzWb), enlaces demo/pdf/video extraidos del HTML real de https://showroom.eroomsuite.com/ (WP REST API, pagina id 7) el 2026-08-26. Imagenes locales tomadas de /img (provistas por el usuario).",
+  "_pendiente": [
+    "Confirmar si se incluye la tarjeta extra 'Cast' (name: 'Cooming Soon') detectada en el sitio en vivo pero ausente en el Figma actual.",
+    "5 productos (eRestaurant, Assistant, ERP, HUB, DAM) solo tienen PDF en el sitio en vivo; sin demos ni video todavia.",
+    "Algunas URLs de PDF/Video apuntan al dominio showroom.eroomsuite.com (hotlink); definir si se re-alojan en el nuevo proyecto/admin.",
+    "Fuente Aspekta (400/500) pendiente de que el usuario proporcione los archivos de fuente."
+  ],
+  "productos": [
+    {
+      "id": "butler",
+      "categoria": "hotelero",
+      "orden": 1,
+      "titulo": "eRoom Butler",
+      "descripcion": "Una potente solución Cloud Service 24/7 que permite a tus huéspedes, gestionar de forma autónoma y personalizada de su estancia.",
+      "imagen": "/img/butler-mockup-card-1.png",
+      "demos": [
+        {
+          "label": "Demo Butler",
+          "url": "https://guest.desk.uat.eroomsuite.com/bu"
+        },
+        {
+          "label": "Demo Butler 2.0",
+          "url": "https://butler.fitur.eroomsuite.com/"
+        },
+        {
+          "label": "Demo Desk",
+          "url": "https://tablet.desk.uat.eroomsuite.com/"
+        },
+        {
+          "label": "Desk/Butler Admin",
+          "url": "https://desk.uat.eroomsuite.com/"
+        }
+      ],
+      "pdfUrl": "https://showroom.eroomsuite.com/wp-content/uploads/2025/01/eRoom-Butler-2026.pdf",
+      "videoUrl": "https://showroom.eroomsuite.com/wp-content/uploads/2025/01/eRoom-Butler-Desk.mp4"
+    },
+    {
+      "id": "hotspot",
+      "categoria": "hotelero",
+      "orden": 2,
+      "titulo": "eRoom Hotspot",
+      "descripcion": "eRoom Hotspot es el portal cautivo de eRoom Suite, una solución integral de Wi-Fi que convierte cada acceso en una oportunidad de interacción",
+      "imagen": "/img/hotspotmockup-card-2.png",
+      "demos": [
+        {
+          "label": "Portal login",
+          "url": "https://demo.eroomsuite.com/e-portal/?demo=true"
+        },
+        {
+          "label": "Portal Ads",
+          "url": "https://demo.eroomsuite.com/e-portal/?demo=true&spamMe=true"
+        },
+        {
+          "label": "Admin",
+          "url": "https://hotspot.eroomsuite.com/admin/dashboard/realtime"
+        }
+      ],
+      "pdfUrl": "https://showroom.eroomsuite.com/wp-content/uploads/2025/01/eRoom-Hotspot-2026.pdf",
+      "videoUrl": "https://showroom.eroomsuite.com/wp-content/uploads/2024/01/EROOM-HOTSPOT_1_1.mp4"
+    },
+    {
+      "id": "tv",
+      "categoria": "hotelero",
+      "orden": 3,
+      "titulo": "eRoom TV",
+      "descripcion": "Sistema interactivo que convierte la televisión del hotel en un centro de entretenimiento y servicios personalizados",
+      "imagen": "/img/eroom-tv-card-3.png",
+      "demos": [
+        {
+          "label": "Backdrop",
+          "url": "https://demo.eroomsuite.com/cast-backdrop/"
+        },
+        {
+          "label": "Demo Admin",
+          "url": "https://tv.eroomsuite.com/dashboard"
+        }
+      ],
+      "pdfUrl": "https://showroom.eroomsuite.com/wp-content/uploads/2025/01/eRoom-TV-2026.pdf",
+      "videoUrl": ""
+    },
+    {
+      "id": "cartas-digitales",
+      "categoria": "hotelero",
+      "orden": 4,
+      "titulo": "Cartas Digitales",
+      "descripcion": "Cartas Digitales by eRoom Suite es la solución tecnológica que le permite a tu cliente visualizar desde su móvil precios de tu menú, tipos de platos con imágenes y videos.",
+      "imagen": "/img/cartas-digitales-card-4.png",
+      "demos": [
+        {
+          "label": "Haz click aquí",
+          "url": "https://cartas.eroomsuite.com/"
+        }
+      ],
+      "pdfUrl": "https://showroom.eroomsuite.com/wp-content/uploads/2025/01/Cartas-Digitales.pdf",
+      "videoUrl": ""
+    },
+    {
+      "id": "chat",
+      "categoria": "hotelero",
+      "orden": 5,
+      "titulo": "eRoom Chat",
+      "descripcion": "eRoom Chat te permite automatizar respuestas en base a las preguntas frecuentes que realizan tus huéspedes.",
+      "imagen": "/img/chat-mockup-card-5.png",
+      "demos": [
+        {
+          "label": "Chat demo",
+          "url": "https://chatgpt.qa.eroomsuite.com/"
+        }
+      ],
+      "pdfUrl": "https://showroom.eroomsuite.com/wp-content/uploads/2025/01/eRoom-Chat-1.pdf",
+      "videoUrl": "https://showroom.eroomsuite.com/wp-content/uploads/2024/01/CHAT_1.mp4"
+    },
+    {
+      "id": "cdp-crm",
+      "categoria": "huesped",
+      "orden": 6,
+      "titulo": "eRoom CDP / CRM",
+      "descripcion": "eRoom CRM es la mejor solución para el sector hospitality & B2B con el objetivo de incrementar el revenue y engagement de tu marca.",
+      "imagen": "/img/crm-mockup-card-7.png",
+      "demos": [
+        {
+          "label": "CDP/CRM B2B demo",
+          "url": "https://b2bcrm.eroomsuite.com/"
+        },
+        {
+          "label": "CDP/CRM B2C demo",
+          "url": "https://crm.eroomsuite.com"
+        }
+      ],
+      "pdfUrl": "https://showroom.eroomsuite.com/wp-content/uploads/2025/01/eRoom-CDP_CRM-2026.pdf",
+      "videoUrl": "https://showroom.eroomsuite.com/wp-content/uploads/2025/01/eRoom-CDP_CRM.mp4"
+    },
+    {
+      "id": "pms",
+      "categoria": "huesped",
+      "orden": 7,
+      "titulo": "eRoom PMS",
+      "descripcion": "Brinda experiencias únicas a los huéspedes a través de procesos que garantizan la mejor atención en el menor tiempo y se adecuan a sus gustos.",
+      "imagen": "/img/mockup-pms-card-8.png",
+      "demos": [
+        {
+          "label": "Demo PMS",
+          "url": "https://pms.eroomsuite.com/"
+        }
+      ],
+      "pdfUrl": "https://showroom.eroomsuite.com/wp-content/uploads/2024/01/eRoom-PMS.pdf",
+      "videoUrl": "https://showroom.eroomsuite.com/wp-content/uploads/2024/01/EROOM-PMS2_1.mp4"
+    },
+    {
+      "id": "signage",
+      "categoria": "huesped",
+      "orden": 8,
+      "titulo": "eRoom Signage",
+      "descripcion": "eRoom Signage es la plataforma de señalética digital de eRoom Suite: una solución centralizada para gestionar y programar contenidos dinámicos en las pantallas de tu hotel.",
+      "imagen": "/img/billboard-urban-mockup-card-6.png",
+      "demos": [
+        {
+          "label": "Signage",
+          "url": "https://signage.eroomsuite.com/"
+        }
+      ],
+      "pdfUrl": "https://showroom.eroomsuite.com/wp-content/uploads/2025/01/eRoom-Signage-2026.pdf",
+      "videoUrl": "https://showroom.eroomsuite.com/wp-content/uploads/2024/01/EROOM-SIGNAGE_1_1.mp4"
+    },
+    {
+      "id": "erestaurant",
+      "categoria": "huesped",
+      "orden": 9,
+      "titulo": "eRoom eRestaurant",
+      "descripcion": "eRestaurant te permite gestionar las transacciones hechas por tus clientes en tu negocio de forma autónoma, ágil y rápida.",
+      "imagen": "/img/erestaurant-mockup-card-10.png",
+      "demos": [],
+      "pdfUrl": "https://showroom.eroomsuite.com/wp-content/uploads/2024/01/eRestaurant.pdf",
+      "videoUrl": ""
+    },
+    {
+      "id": "bi",
+      "categoria": "huesped",
+      "orden": 10,
+      "titulo": "eRoom BI",
+      "descripcion": "Conoce el estado actual de tu negocio y realiza proyecciones a futuro tomando todas las variables que creas pertinentes y el periodo de tiempo que desees evaluar y/o proyectar.",
+      "imagen": "/img/bi-mockup-card-11.png",
+      "demos": [
+        {
+          "label": "Demo BI",
+          "url": "https://bi.eroomsuite.com/"
+        }
+      ],
+      "pdfUrl": "https://showroom.eroomsuite.com/wp-content/uploads/2025/01/eRoom-BI.pdf",
+      "videoUrl": "https://showroom.eroomsuite.com/wp-content/uploads/2025/01/Eroom-Video-Bi.mp4"
+    },
+    {
+      "id": "assistant",
+      "categoria": "huesped",
+      "orden": 11,
+      "titulo": "eRoom Assistant",
+      "descripcion": "eRoom Assistant es la solución más avanzada del mercado para ahorrar costes en suministros mediante controles de presencia y un algoritmo de eficiencia.",
+      "imagen": "/img/assistant-mockup-card-9.png",
+      "demos": [],
+      "pdfUrl": "https://showroom.eroomsuite.com/wp-content/uploads/2024/01/eRoom-Assistant.pdf",
+      "videoUrl": ""
+    },
+    {
+      "id": "network-solutions",
+      "categoria": "huesped",
+      "orden": 12,
+      "titulo": "eRoom Network Solutions",
+      "descripcion": "eRoom Network Solutions despliega ecosistemas de red desde arquitecturas GPON hasta entornos de ciberseguridad avanzada diseñados para la alta demanda operativa de un hotel moderno.",
+      "imagen": "/img/network-mockup-card-13.png",
+      "demos": [],
+      "pdfUrl": "https://showroom.eroomsuite.com/wp-content/uploads/2025/01/eRoom-Network-Solutions-2026.pdf",
+      "videoUrl": "https://showroom.eroomsuite.com/wp-content/uploads/2025/01/eRoom-Ns-2025.mp4"
+    },
+    {
+      "id": "erp",
+      "categoria": "huesped",
+      "orden": 13,
+      "titulo": "eRoom ERP",
+      "descripcion": "Automatiza y gestiona todos los procesos operativos de tu negocio en un solo lugar.",
+      "imagen": "/img/erp-mockup-card-14.png",
+      "demos": [],
+      "pdfUrl": "https://showroom.eroomsuite.com/wp-content/uploads/2024/01/eRoom_ERP.pdf",
+      "videoUrl": ""
+    },
+    {
+      "id": "hub",
+      "categoria": "huesped",
+      "orden": 14,
+      "titulo": "eRoom HUB",
+      "descripcion": "eRoom HUB es la herramienta On Cloud que te permite conectar tus aplicaciones de terceros con el universo de soluciones eRoom para una colaboración más rápida, sencilla y segura.",
+      "imagen": "/img/mockup-hub-card-12.png",
+      "demos": [],
+      "pdfUrl": "https://showroom.eroomsuite.com/wp-content/uploads/2024/01/eRoom-HUB.pdf",
+      "videoUrl": ""
+    },
+    {
+      "id": "dam",
+      "categoria": "huesped",
+      "orden": 15,
+      "titulo": "eRoom DAM",
+      "descripcion": "Con eRoom DAM podrás organizar y encontrar tus documentos fácilmente, controlar los accesos, automatizar el trabajo en línea.",
+      "imagen": "/img/dam-mockup-card-15.png",
+      "demos": [],
+      "pdfUrl": "https://showroom.eroomsuite.com/wp-content/uploads/2024/01/eRoom-DAM.pdf",
+      "videoUrl": ""
+    }
+  ]
+}

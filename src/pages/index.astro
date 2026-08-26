@@ -1,0 +1,39 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import Header from "../components/Header.astro";
+import Footer from "../components/Footer.astro";
+import SectionTitle from "../components/SectionTitle.astro";
+import ProductCard from "../components/ProductCard.tsx";
+import VideoModal from "../components/VideoModal.tsx";
+import { getProductsByCategoria } from "../data/products";
+
+const hoteleros = getProductsByCategoria("hotelero");
+const huespedes = getProductsByCategoria("huesped");
+---
+
+<BaseLayout title="eRoom Suite — Showroom">
+  <Header />
+
+  <main class="mx-auto flex max-w-[1920px] flex-col gap-24 px-10 py-16 sm:px-20">
+    <section class="flex flex-col gap-12">
+      <SectionTitle text="Herramientas para hoteleros" />
+      <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-3">
+        {hoteleros.map((product) => <ProductCard product={product} client:visible />)}
+      </div>
+    </section>
+
+    <section class="flex flex-col gap-12">
+      <SectionTitle text="Herramientas para huéspedes" />
+      <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-3">
+        {huespedes.map((product) => <ProductCard product={product} client:visible />)}
+      </div>
+    </section>
+  </main>
+
+  <Footer />
+
+  <!-- client:load (no client:visible): este componente no renderiza nada
+       visible hasta que se abre un video, así que un observer de
+       intersección nunca lo consideraría "visible" y jamás se hidrataría. -->
+  <VideoModal client:load />
+</BaseLayout>
