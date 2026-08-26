@@ -1,4 +1,4 @@
-import { asc, eq } from "drizzle-orm";
+import { asc, eq, inArray, type SQL } from "drizzle-orm";
 import { db } from "../db/client";
 import { products as productsTable, demos as demosTable } from "../db/schema";
 import type { Product, Categoria, Demo } from "./types";
@@ -9,7 +9,10 @@ import type { Product, Categoria, Demo } from "./types";
  * resto de la app (páginas públicas y admin) solo conoce estas funciones.
  */
 
-function toProduct(row: typeof productsTable.$inferSelect, demoRows: (typeof demosTable.$inferSelect)[]): Product {
+type ProductRow = typeof productsTable.$inferSelect;
+type DemoRow = typeof demosTable.$inferSelect;
+
+function toProduct(row: ProductRow, demoRows: DemoRow[]): Product {
   return {
     id: row.id,
     categoria: row.categoria as Categoria,
@@ -23,36 +26,62 @@ function toProduct(row: typeof productsTable.$inferSelect, demoRows: (typeof dem
   };
 }
 
-async function getDemosFor(productId: string) {
-  return db.select().from(demosTable).where(eq(demosTable.productId, productId)).orderBy(asc(demosTable.orden));
+/**
+ * Trae productos (+ sus demos) en 2 queries siempre, sin importar cuántos
+ * productos haya: 1 para products, 1 para TODOS sus demos con un solo
+ * `WHERE product_id IN (...)`. La alternativa obvia — un query de demos por
+ * producto (N+1) — es la que tenía esto antes, y contra un Postgres remoto
+ * (Supabase) cada round-trip de red se paga aparte: con 15 productos eran
+ * ~17 queries secuenciales y varios segundos de carga por request.
+ */
+async function fetchProductsWithDemos(where?: SQL): Promise<Product[]> {
+  const rows = where
+    ? await db.select().from(productsTable).where(where).orderBy(asc(productsTable.orden))
+    : await db.select().from(productsTable).orderBy(asc(productsTable.orden));
+
+  if (rows.length === 0) return [];
+
+  const demoRows = await db
+    .select()
+    .from(demosTable)
+    .where(
+      inArray(
+        demosTable.productId,
+        rows.map((r) => r.id)
+      )
+    )
+    .orderBy(asc(demosTable.orden));
+
+  const demosByProduct = new Map<string, DemoRow[]>();
+  for (const demo of demoRows) {
+    const list = demosByProduct.get(demo.productId) ?? [];
+    list.push(demo);
+    demosByProduct.set(demo.productId, list);
+  }
+
+  return rows.map((row) => toProduct(row, demosByProduct.get(row.id) ?? []));
 }
 
 export async function getProductsByCategoria(categoria: Categoria): Promise<Product[]> {
-  const rows = await db
-    .select()
-    .from(productsTable)
-    .where(eq(productsTable.categoria, categoria))
-    .orderBy(asc(productsTable.orden));
-
-  const result: Product[] = [];
-  for (const row of rows) {
-    result.push(toProduct(row, await getDemosFor(row.id)));
-  }
-  return result;
+  return fetchProductsWithDemos(eq(productsTable.categoria, categoria));
 }
 
+/** Trae los 15 productos de una — usar esto en vez de dos llamadas a
+ * getProductsByCategoria cuando se necesitan ambas categorías (ej. la home
+ * y el dashboard del admin), para no duplicar queries. */
 export async function getAllProducts(): Promise<Product[]> {
-  const [hoteleros, huespedes] = await Promise.all([
-    getProductsByCategoria("hotelero"),
-    getProductsByCategoria("huesped"),
-  ]);
-  return [...hoteleros, ...huespedes];
+  return fetchProductsWithDemos();
 }
 
 export async function getProductById(id: string): Promise<Product | null> {
   const rows = await db.select().from(productsTable).where(eq(productsTable.id, id)).limit(1);
   if (rows.length === 0) return null;
-  return toProduct(rows[0], await getDemosFor(id));
+  const demoRows = await db
+    .select()
+    .from(demosTable)
+    .where(eq(demosTable.productId, id))
+    .orderBy(asc(demosTable.orden));
+  return toProduct(rows[0], demoRows);
 }
 
 export type ProductUpdateInput = {

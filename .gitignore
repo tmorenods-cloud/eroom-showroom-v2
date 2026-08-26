@@ -15,3 +15,7 @@ npm-debug.log*
 
 # macOS
 .DS_Store
+
+# reemplazo local de Postgres sin Docker (ver README para el real)
+.local-pg-server.mjs
+.local-pg-data/

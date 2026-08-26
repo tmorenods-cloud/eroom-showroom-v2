@@ -5,16 +5,18 @@ import Footer from "../components/Footer.astro";
 import SectionTitle from "../components/SectionTitle.astro";
 import ProductCard from "../components/ProductCard.tsx";
 import VideoModal from "../components/VideoModal.tsx";
-import { getProductsByCategoria } from "../data/products";
+import { getAllProducts } from "../data/products";
 
 // El contenido vive en Postgres y se edita desde /admin — sin esto, un
 // cambio en el admin no se vería hasta el próximo build.
 export const prerender = false;
 
-const [hoteleros, huespedes] = await Promise.all([
-  getProductsByCategoria("hotelero"),
-  getProductsByCategoria("huesped"),
-]);
+// Una sola llamada (2 queries) en vez de una por categoría — ver el
+// comentario en fetchProductsWithDemos sobre por qué importa contra un
+// Postgres remoto.
+const productos = await getAllProducts();
+const hoteleros = productos.filter((p) => p.categoria === "hotelero");
+const huespedes = productos.filter((p) => p.categoria === "huesped");
 ---
 
 <BaseLayout title="eRoom Suite — Showroom">
