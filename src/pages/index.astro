@@ -22,17 +22,17 @@ const huespedes = productos.filter((p) => p.categoria === "huesped");
 <BaseLayout title="eRoom Suite — Showroom">
   <Header />
 
-  <main class="mx-auto flex max-w-[1920px] flex-col gap-24 px-10 py-16 sm:px-20">
-    <section class="flex flex-col gap-12">
+  <main id="main-content" class="mx-auto flex max-w-[1920px] flex-col gap-24 px-[var(--page-pad-x)] py-16">
+    <section id="section-hoteleros" class="flex flex-col gap-12">
       <SectionTitle text="Herramientas para hoteleros" />
-      <div class="grid grid-cols-1 gap-x-4 gap-y-11 sm:grid-cols-2 xl:grid-cols-3">
+      <div class="product-grid grid grid-cols-1 gap-x-4 gap-y-11 sm:grid-cols-2 xl:grid-cols-3">
         {hoteleros.map((product) => <ProductCard product={product} client:visible />)}
       </div>
     </section>
 
-    <section class="flex flex-col gap-12">
+    <section id="section-huespedes" class="flex flex-col gap-12">
       <SectionTitle text="Herramientas para huéspedes" />
-      <div class="grid grid-cols-1 gap-x-4 gap-y-11 sm:grid-cols-2 xl:grid-cols-3">
+      <div class="product-grid grid grid-cols-1 gap-x-4 gap-y-11 sm:grid-cols-2 xl:grid-cols-3">
         {huespedes.map((product) => <ProductCard product={product} client:visible />)}
       </div>
     </section>

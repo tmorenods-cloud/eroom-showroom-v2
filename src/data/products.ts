@@ -73,15 +73,12 @@ export async function getAllProducts(): Promise<Product[]> {
   return fetchProductsWithDemos();
 }
 
+// Reusa fetchProductsWithDemos (mismo camino de 2 queries) en vez de repetir
+// la lógica de armar el Product a mano — antes duplicaba el select + join de
+// demos que ya hace la función de arriba.
 export async function getProductById(id: string): Promise<Product | null> {
-  const rows = await db.select().from(productsTable).where(eq(productsTable.id, id)).limit(1);
-  if (rows.length === 0) return null;
-  const demoRows = await db
-    .select()
-    .from(demosTable)
-    .where(eq(demosTable.productId, id))
-    .orderBy(asc(demosTable.orden));
-  return toProduct(rows[0], demoRows);
+  const [product] = await fetchProductsWithDemos(eq(productsTable.id, id));
+  return product ?? null;
 }
 
 export type ProductUpdateInput = {

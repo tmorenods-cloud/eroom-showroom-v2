@@ -39,9 +39,13 @@ export function createSessionCookieValue(): string {
   return sign(Date.now().toString());
 }
 
+// secure: solo en producción (HTTPS). En dev local (http://localhost) un
+// navegador descarta cualquier cookie marcada Secure recibida por HTTP plano
+// — con `true` fijo, el login de /admin nunca persistía la sesión en local y
+// el middleware te devolvía en loop a /admin/login.
 export const SESSION_COOKIE_OPTIONS = {
   httpOnly: true,
-  secure: true,
+  secure: process.env.NODE_ENV === "production",
   sameSite: "lax" as const,
   path: "/",
   maxAge: MAX_AGE_SECONDS,

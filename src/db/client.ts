@@ -20,6 +20,12 @@ if (!connectionString) {
 // socket que ya está muerto del otro lado, y la primera query después de un
 // rato sin tráfico revienta con CONNECTION_CLOSED en vez de reconectar. Con
 // idle_timeout reciclamos la conexión nosotros antes de que el pooler lo haga.
-const client = postgres(connectionString, { prepare: false, max: 1, idle_timeout: 20 });
+//
+// connect_timeout:10 — en dev contra un Postgres remoto (Supabase), sin esto
+// una conexión que no llega a establecerse (pooler frío, hiccup de red) deja
+// la request colgada sin límite: la carga de "/" nunca resuelve y el
+// navegador se queda girando indefinidamente. Con el timeout, en el peor
+// caso falla rápido con un error visible en vez de tildarse.
+const client = postgres(connectionString, { prepare: false, max: 1, idle_timeout: 20, connect_timeout: 10 });
 
 export const db = drizzle(client, { schema });

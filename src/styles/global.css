@@ -39,6 +39,71 @@
   --radius-pill-inner: 12px;
 }
 
+/*
+ * Tamaños fluidos de ProductCard y del layout general (tablet/mobile) — en
+ * vez de saltar entre valores fijos por breakpoint, escalan de forma
+ * continua con clamp(). Fórmula estándar de fluid typography:
+ *   valor = min + (max - min) * ratio
+ *   ratio = (100vw - vpMin) / (vpMax - vpMin), acotado por clamp() en los
+ *   extremos (por debajo de vpMin queda en min, por encima de vpMax en max).
+ *
+ * Breakpoints de referencia (coinciden con los que ya usa el grid en
+ * index.astro): 441px mobile de referencia (iPhone 17 Pro), 640px `sm`
+ * (arranca tablet vertical), 1200px tablet en horizontal/landscape (techo
+ * real de un tablet físico — también el breakpoint del modo hover/tap en
+ * ProductCard.tsx, así que no se toca acá) y 1400px, techo de desktop
+ * chico/laptop antes de pasar a desktop grande (subido desde 1280 a pedido,
+ * para ganar espacio de contenido en laptop). 1920px es el max-w del <main>
+ * (monitor ancho). No todas las variables usan los mismos tramos — cada una
+ * comenta su propio rango, pero todas siguen la misma fórmula de clamp() de
+ * arriba. --card-pad tiene 4 tramos: mobile→tablet (441→640), meseta plana
+ * en valor "tablet" entre 640 y 1400 (640→1200 la sostiene el clamp() base
+ * sin necesidad de una regla intermedia, y 1200→1400 la sostiene el clamp()
+ * del @media de abajo, cuyo arranque en 1200 queda igual porque coincide
+ * con el breakpoint de hover), y recién laptop→desktop (1400→1920) rampea
+ * a su máximo. --page-pad-x sigue el mismo criterio: prioriza espacio de
+ * contenido en phone/tablet/laptop, se mantiene en su mínimo hasta 1400 y
+ * recién ahí empieza su único tramo, 1400→1920, hacia el máximo.
+ */
+:root {
+  --card-pad: clamp(12px, calc(12px + (16px - 12px) * ((100vw - 441px) / (640px - 441px))), 16px);
+  /* Padding horizontal de main/footer: se mantiene en 20px (mínimo del
+     clamp()) en todo phone + tablet vertical + tablet horizontal + laptop —
+     hasta 1400px — para priorizar espacio de contenido en esos anchos.
+     Recién a partir de 1400px (desktop grande) empieza a crecer, y llega a
+     64px en 1920px (el max-w del <main>) — de ahí en más queda fijo en
+     64px, como un monitor ancho ya con aire de sobra. Por debajo de 1400px
+     el ratio da negativo y el clamp() lo pisa con el mínimo, así que un
+     solo clamp() alcanza sin @media aparte. */
+  --page-pad-x: clamp(20px, calc(20px + (64px - 20px) * ((100vw - 1400px) / (1920px - 1400px))), 64px);
+  --card-desc-size: clamp(14px, calc(14px + (16px - 14px) * ((100vw - 441px) / (1280px - 441px))), 16px);
+  --card-btn-size: clamp(14px, calc(14px + (18px - 14px) * ((100vw - 441px) / (1280px - 441px))), 18px);
+  /* Mínimo bajado a 15px (antes 18px) a pedido — botones de demo en mobile.
+     Techo bajado a 18px (antes 20px) y corrido de 1280 a 1400px a pedido —
+     no se tocó el resto de los tamaños de card (siguen en 1280). */
+  --card-demo-size: clamp(15px, calc(15px + (18px - 15px) * ((100vw - 441px) / (1400px - 441px))), 18px);
+  --card-title-size: clamp(24px, calc(24px + (32px - 24px) * ((100vw - 441px) / (1280px - 441px))), 32px);
+  /* Link "Contacto" del header — mismo tramo 441→1280 que los tamaños de
+     card de arriba, a pedido: 20px mínimo, 24px máximo. */
+  --header-contact-size: clamp(20px, calc(20px + (24px - 20px) * ((100vw - 441px) / (1280px - 441px))), 24px);
+  /* Padding vertical de btn-demo: 12px en mobile, sube a 16px en 1280px
+     (mismo tramo 441→1280 que los tamaños de texto de la card de arriba;
+     no se corrió a 1400 — no se pidió tocar este). */
+  --btn-demo-pad-y: clamp(12px, calc(12px + (16px - 12px) * ((100vw - 441px) / (1280px - 441px))), 16px);
+}
+
+@media (min-width: 1200px) {
+  :root {
+    /* El @media sigue arrancando en 1200 (sin tocar, coincide con el
+       breakpoint de hover), pero el clamp() interno ya no rampea desde ahí:
+       se mantiene en su mínimo de 16px durante todo 1200→1400 (ratio da
+       negativo y el clamp() lo pisa con el mínimo, a pedido — antes llegaba
+       a 32px en 1400) y recién arranca a crecer en 1400, llegando a 32px en
+       1920px (el max-w del <main>, mismo techo que --page-pad-x). */
+    --card-pad: clamp(16px, calc(16px + (32px - 16px) * ((100vw - 1400px) / (1920px - 1400px))), 32px);
+  }
+}
+
 html {
   color-scheme: dark;
 }

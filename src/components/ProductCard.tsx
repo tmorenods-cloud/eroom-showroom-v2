@@ -8,17 +8,29 @@ import type { Product } from "../data/types";
  * de eRoom Butler en el diseño). Al interactuar aparece el glass overlay con
  * el grid de demos, PDF/Video y la descripción, con fade-in + translateY.
  *
- * - Desktop (pointer con hover): se activa con mouse enter/leave.
- * - Táctil (tablet/mobile): se activa con un tap; un tap fuera de la tarjeta
- *   la cierra.
+ * - Desktop (pointer con hover, >= 1200px): se activa con mouse enter/leave.
+ * - Tablet/mobile (< 1200px): se activa con un tap; un tap fuera de la
+ *   tarjeta la cierra. Aplica incluso en dispositivos táctiles que reportan
+ *   soporte de hover (p. ej. un iPad con Magic Keyboard/trackpad), porque el
+ *   diseño fija el corte en el mismo breakpoint que el resto de la UI (ver
+ *   los botones btn-demo/btn-pdf/btn-video), no en la capacidad del puntero.
  */
 
-let hoverCapable: boolean | null = null;
-function supportsHover() {
-  if (hoverCapable === null) {
-    hoverCapable = typeof window !== "undefined" && window.matchMedia("(hover: hover)").matches;
-  }
-  return hoverCapable;
+// Combina capacidad de hover con el ancho de viewport (mismo breakpoint que
+// btn-demo/btn-pdf/btn-video) y se re-evalúa en cambios de tamaño/rotación
+// vía el listener de matchMedia, en vez de calcularse una sola vez al cargar.
+function useHoverMode() {
+  const [hoverMode, setHoverMode] = useState(false);
+
+  useEffect(() => {
+    const mql = window.matchMedia("(hover: hover) and (min-width: 1200px)");
+    const update = () => setHoverMode(mql.matches);
+    update();
+    mql.addEventListener("change", update);
+    return () => mql.removeEventListener("change", update);
+  }, []);
+
+  return hoverMode;
 }
 
 function chunkInRows<T>(items: T[], size: number): T[][] {
@@ -42,10 +54,21 @@ const revealStyle = (active: boolean, delayMs: number): React.CSSProperties => (
 // de forma que el desenfoque se acumula desde el centro de la imagen hacia la
 // base de la tarjeta (texto y botones), en vez de un backdrop-blur parejo en
 // toda la superficie. 0% es el borde superior de la tarjeta, 100% el inferior.
+//
+// Se probó bajar GLASS_BLUR_STEPS a 4 (compensando blur/contraste/saturación
+// para que el resultado final en la base diera igual) para montar menos
+// backdrop-filter por card — pero menos capas = menos escalones en el
+// degradé, y aunque el valor final compuesto sea el mismo, se nota como un
+// salto más brusco (sobre todo en contraste/saturación, más sensibles al ojo
+// que el blur). Se volvió a 8 a pedido por eso. La optimización real de
+// performance no dependía del número de capas sino de mostrarlas (ver
+// showGlass más abajo).
 const GLASS_BLUR_START_PCT = 45; // desde acá empieza a sumar blur (0px)
 const GLASS_BLUR_END_PCT = 100; // al llegar acá alcanza el blur máximo
 const GLASS_BLUR_MAX_PX = 64;
 const GLASS_BLUR_STEPS = 8; // más pasos = transición más suave entre bandas
+const GLASS_CONTRAST = 1.25;
+const GLASS_SATURATE = 1.125;
 
 const glassLayers = Array.from({ length: GLASS_BLUR_STEPS }, (_, i) => {
   const span = GLASS_BLUR_END_PCT - GLASS_BLUR_START_PCT;
@@ -69,12 +92,40 @@ function glassMaskStyle(from: number, to: number): React.CSSProperties {
 const glassFadeClass = (active: boolean) =>
   `transition-opacity duration-500 ease-out ${active ? "opacity-100" : "pointer-events-none opacity-0"}`;
 
+// Debe coincidir con la duración de glassFadeClass/revealClass (duration-500)
+// — ver el useEffect de showGlass más abajo.
+const GLASS_TRANSITION_MS = 500;
+
+// btn-pdf y btn-video comparten exactamente el mismo estilo (solo cambia el
+// nombre de la clase raíz, usado como hook de estilos/analytics) — antes
+// estaba repetido dos veces letra por letra.
+const cardPillBtnClass = (variant: "btn-pdf" | "btn-video") =>
+  `${variant} flex flex-1 items-center justify-center rounded-pill-inner px-5 py-3 text-center text-[length:var(--card-btn-size)] font-normal leading-[1.15] tracking-[-0.01em] bg-white text-link-active transition-colors duration-200 xl:font-[450] xl:tracking-[-0.4px] min-[1200px]:bg-transparent min-[1200px]:text-white min-[1200px]:hover:bg-white min-[1200px]:hover:text-link-active`;
+
 export default function ProductCard({ product }: { product: Product }) {
   const [active, setActive] = useState(false);
+  const hoverMode = useHoverMode();
   const rootRef = useRef<HTMLDivElement>(null);
 
+  // Las capas de blur (glassLayers) solo se montan mientras la card está
+  // activa o recién se desactivó — antes quedaban siempre en el DOM con
+  // opacity:0, y backdrop-filter es de lo más caro de componer que hay en
+  // CSS: con 15 cards en la grilla eso eran ~15×N capas pagando su costo
+  // todo el tiempo, aunque casi siempre 0 o 1 card esté activa a la vez. El
+  // timeout retrasa el desmontaje para no cortar el fade-out de 500ms a la
+  // mitad (glassFadeClass/revealClass usan esa misma duración).
+  const [showGlass, setShowGlass] = useState(false);
   useEffect(() => {
-    if (supportsHover()) return;
+    if (active) {
+      setShowGlass(true);
+      return;
+    }
+    const timeout = setTimeout(() => setShowGlass(false), GLASS_TRANSITION_MS);
+    return () => clearTimeout(timeout);
+  }, [active]);
+
+  useEffect(() => {
+    if (hoverMode) return;
     function handleOutside(e: PointerEvent) {
       if (rootRef.current && !rootRef.current.contains(e.target as Node)) {
         setActive(false);
@@ -82,7 +133,15 @@ export default function ProductCard({ product }: { product: Product }) {
     }
     document.addEventListener("pointerdown", handleOutside);
     return () => document.removeEventListener("pointerdown", handleOutside);
-  }, []);
+  }, [hoverMode]);
+
+  // Si el modo cambia (resize/rotación cruza el breakpoint de 1200px),
+  // arranca en estado cerrado en vez de arrastrar el `active` del modo
+  // anterior (p. ej. una tarjeta que quedó abierta por tap en tablet no debe
+  // seguir abierta al pasar a modo hover de desktop).
+  useEffect(() => {
+    setActive(false);
+  }, [hoverMode]);
 
   const hasDemos = product.demos.length > 0;
   const hasPdf = Boolean(product.pdfUrl);
@@ -92,7 +151,7 @@ export default function ProductCard({ product }: { product: Product }) {
   const demoRows = chunkInRows(product.demos, product.demos.length === 2 ? 1 : 2);
 
   function toggleOnTap() {
-    if (!supportsHover()) setActive((a) => !a);
+    if (!hoverMode) setActive((a) => !a);
   }
 
   function openVideo(e: React.SyntheticEvent) {
@@ -105,23 +164,24 @@ export default function ProductCard({ product }: { product: Product }) {
   return (
     <div
       ref={rootRef}
-      onMouseEnter={() => supportsHover() && setActive(true)}
-      onMouseLeave={() => supportsHover() && setActive(false)}
+      onMouseEnter={() => hoverMode && setActive(true)}
+      onMouseLeave={() => hoverMode && setActive(false)}
       onClick={toggleOnTap}
-      className="group flex w-full flex-col items-start gap-1 outline-none"
+      className="product-card group flex w-full flex-col items-start gap-1 outline-none"
       data-product-id={product.id}
     >
-      <div className="relative h-[450px] w-full cursor-pointer overflow-hidden rounded-card">
+      <div className="product-card-media relative aspect-[4/3] w-full cursor-pointer overflow-hidden rounded-card">
         <img
           src={product.imagen}
           alt={product.titulo}
           loading="lazy"
-          className="absolute inset-0 h-full w-full object-cover"
+          decoding="async"
+          className="product-card-image absolute inset-0 h-full w-full object-cover"
         />
 
         {/* Capa que oscurece la imagen al interactuar */}
         <div
-          className="absolute inset-0 transition-opacity duration-500 ease-out"
+          className="product-card-shade absolute inset-0 transition-opacity duration-500 ease-out"
           style={{
             backgroundImage:
               "linear-gradient(to bottom, rgb(61 83 126 / 0) 0%, var(--color-card-shade-via) 48.077%, var(--color-card-shade) 100%)",
@@ -131,38 +191,44 @@ export default function ProductCard({ product }: { product: Product }) {
 
         {/* Overlay glass con demos / pdf / video / descripción. Cada capa
             controla su propia opacidad (ver glassFadeClass) en vez de
-            heredarla de un padre común. */}
-        {glassLayers.map(({ from, to, blurPx }, i) => (
+            heredarla de un padre común. Solo se monta mientras hace falta
+            (ver showGlass más arriba) — el resto del tiempo esta card no
+            paga el costo de sus backdrop-filter. */}
+        {showGlass && glassLayers.map(({ from, to, blurPx }, i) => (
           <div
             key={i}
-            className={`absolute inset-0 ${glassFadeClass(active)}`}
+            className={`product-card-glass-layer absolute inset-0 ${glassFadeClass(active)}`}
             style={{
-              backdropFilter: `blur(${blurPx}px) contrast(1.25) saturate(1.5)`,
-              WebkitBackdropFilter: `blur(${blurPx}px) contrast(1.25) saturate(1.5)`,
+              backdropFilter: `blur(${blurPx}px) contrast(${GLASS_CONTRAST}) saturate(${GLASS_SATURATE})`,
+              WebkitBackdropFilter: `blur(${blurPx}px) contrast(${GLASS_CONTRAST}) saturate(${GLASS_SATURATE})`,
               ...glassMaskStyle(from, to),
             }}
           />
         ))}
-        <div className={`absolute inset-0 bg-[rgba(14,35,62,0.02)] ${glassFadeClass(active)}`} />
+        <div className={`product-card-glass-tint absolute inset-0 bg-[rgba(14,35,62,0.02)] ${glassFadeClass(active)}`} />
 
-        <div className={`absolute inset-0 flex flex-col justify-between p-8 ${active ? "" : "pointer-events-none"}`}>
+        <div
+          className={`product-card-content absolute inset-0 flex flex-col justify-between p-[var(--card-pad)] ${active ? "" : "pointer-events-none"}`}
+        >
           {hasDemos && (
             // El blur propio de este pill tiene su propio fade (glassFadeClass) en vez
             // de heredar la opacidad del wrapper: un backdrop-filter dentro de un
             // ancestro cuya opacidad está animando puede saltar en vez de transicionar
             // suave (el mismo motivo por el que las capas de arriba se auto-manejan).
             <div
-              className={`flex flex-col gap-0.5 rounded-pill-outer bg-white/45 p-1 ${glassFadeClass(active)}`}
+              className={`product-card-demos flex flex-col gap-0.5 rounded-pill-outer bg-white/45 p-1 ${glassFadeClass(active)}`}
               style={{
                 backdropFilter: "blur(64px) saturate(1.15)",
                 WebkitBackdropFilter: "blur(64px) saturate(1.15)",
               }}
             >
               {demoRows.map((row, i) => (
+                // A partir de tablet y mobile (< xl) siempre en columna: solo
+                // desde `xl` (desktop) se recuperan las 2 columnas cuando la
+                // fila tiene 2 demos.
                 <div
                   key={i}
-                  className="grid gap-0.5"
-                  style={{ gridTemplateColumns: row.length === 2 ? "1fr 1fr" : "1fr" }}
+                  className={`product-card-demo-row grid grid-cols-1 gap-0.5 ${row.length === 2 ? "xl:grid-cols-2" : ""}`}
                 >
                   {row.map((demo, j) => (
                     <a
@@ -171,7 +237,7 @@ export default function ProductCard({ product }: { product: Product }) {
                       target="_blank"
                       rel="noopener noreferrer"
                       onClick={(e) => e.stopPropagation()}
-                      className={`flex h-[76px] items-center justify-center rounded-pill-inner px-5 text-center text-[20px] font-medium tracking-[-0.4px] text-ink transition-colors duration-200 hover:bg-white ${revealClass(
+                      className={`btn-demo flex h-auto items-center justify-center rounded-pill-inner px-[1em] py-[var(--btn-demo-pad-y)] text-center text-[length:var(--card-demo-size)] font-medium tracking-[-0.4px] text-ink transition-colors duration-200 sm:px-5 bg-white min-[1200px]:bg-transparent min-[1200px]:hover:bg-white ${revealClass(
                         active
                       )}`}
                       style={revealStyle(active, (i * row.length + j) * 40)}
@@ -184,10 +250,10 @@ export default function ProductCard({ product }: { product: Product }) {
             </div>
           )}
 
-          <div className={`flex w-full flex-col items-start gap-5 ${!hasDemos ? "mt-auto" : ""}`}>
+          <div className={`product-card-footer flex w-full flex-col items-start gap-5 ${!hasDemos ? "mt-auto" : ""}`}>
             {(hasPdf || hasVideo) && (
               <div
-                className={`flex w-full items-center gap-0.5 rounded-pill-outer bg-white/38 p-1 ${revealClass(active)}`}
+                className={`product-card-actions flex w-full items-center gap-0.5 rounded-pill-outer bg-white/38 p-1 ${revealClass(active)}`}
                 style={revealStyle(active, 120)}
               >
                 {hasPdf && (
@@ -196,7 +262,7 @@ export default function ProductCard({ product }: { product: Product }) {
                     target="_blank"
                     rel="noopener noreferrer"
                     onClick={(e) => e.stopPropagation()}
-                    className="flex flex-1 items-center justify-center rounded-pill-inner px-5 py-3 text-center text-[18px] font-[450] tracking-[-0.4px] text-white transition-colors duration-200 hover:bg-white hover:text-link-active"
+                    className={cardPillBtnClass("btn-pdf")}
                   >
                     PDF Informativo
                   </a>
@@ -205,7 +271,7 @@ export default function ProductCard({ product }: { product: Product }) {
                   <button
                     type="button"
                     onClick={openVideo}
-                    className="flex flex-1 items-center justify-center rounded-pill-inner px-5 py-3 text-center text-[18px] font-[450] tracking-[-0.4px] text-white transition-colors duration-200 hover:bg-white hover:text-link-active"
+                    className={cardPillBtnClass("btn-video")}
                   >
                     Video Promocional
                   </button>
@@ -214,7 +280,9 @@ export default function ProductCard({ product }: { product: Product }) {
             )}
 
             <p
-              className={`w-full text-[16px] font-normal leading-[1.15] tracking-[-0.16px] text-white ${revealClass(active)}`}
+              className={`product-card-description w-full text-[length:var(--card-desc-size)] font-normal leading-[1.15] tracking-[-0.01em] text-white xl:tracking-[-0.16px] ${revealClass(
+                active
+              )}`}
               style={revealStyle(active, 160)}
             >
               {product.descripcion}
@@ -223,7 +291,9 @@ export default function ProductCard({ product }: { product: Product }) {
         </div>
       </div>
 
-      <p className="text-[32px] font-medium leading-[1.15] tracking-[-0.72px] text-white">{product.titulo}</p>
+      <p className="product-card-title text-[length:var(--card-title-size)] font-medium leading-[1.15] tracking-[-0.72px] text-white">
+        {product.titulo}
+      </p>
     </div>
   );
 }

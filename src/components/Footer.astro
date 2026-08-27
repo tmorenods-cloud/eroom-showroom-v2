@@ -1,27 +1,75 @@
 ---
-// Footer.astro — node 4034:328 en Figma. Degradado radial + wordmark gigante.
-const links = [
-  { label: "Términos de uso", href: "/terminos-de-uso" },
-  { label: "Política de privacidad", href: "/politica-de-privacidad" },
-  { label: "GDPR", href: "/gdpr" },
+// Footer.astro — node 4034:328 (tablet/desktop) y 4055:387 (mobile) en Figma.
+// Degradado radial + wordmark. El mobile tiene una composición propia (título +
+// redes + email arriba, legal abajo) en vez de ser el mismo layout comprimido.
+// Ocultos a pedido — las páginas que referencian todavía no existen en
+// src/pages (/terminos-de-uso, /politica-de-privacidad, /gdpr). Para
+// reactivarlos: descomentar esto y el bloque `footer-links-list` de abajo.
+// const links = [
+//   { label: "Términos de uso", href: "/terminos-de-uso" },
+//   { label: "Política de privacidad", href: "/politica-de-privacidad" },
+//   { label: "GDPR", href: "/gdpr" },
+// ];
+
+const social = [
+  { label: "Instagram", href: "https://www.instagram.com/eroomsuite/", icon: "/svg/instagram-line.svg" },
+  { label: "LinkedIn", href: "https://www.linkedin.com/company/eroomsuite", icon: "/svg/linkedin-icon.svg" },
+  { label: "YouTube", href: "https://www.youtube.com/channel/UCDoAmZRIZBq4JpkiZPLs8DA", icon: "/svg/youtube-fill.svg" },
 ];
 ---
 
-<footer class="footer-gradient flex flex-col gap-6 px-10 pb-6 pt-24 sm:px-[240px] sm:pt-[190px]">
-  <div
-    class="flex flex-col items-start justify-between gap-2 text-lg leading-[1.4] text-footer-text sm:flex-row sm:items-center"
-  >
-    <div class="flex flex-wrap gap-6 sm:gap-[52px]">
-      {links.map((link) => <a href={link.href}>{link.label}</a>)}
+<footer id="site-footer" class="footer-gradient flex flex-col">
+  {/* Mobile (< sm) — node 4055:387 */}
+  <div class="footer-mobile flex flex-col items-start gap-[81px] px-[var(--page-pad-x)] pb-6 pt-8 sm:hidden">
+    <img src="/svg/eroom-suite-wordmark.svg" alt="eRoom Suite" class="footer-wordmark h-auto w-full" />
+
+    <div class="flex flex-col items-start gap-[52px]">
+      <p class="footer-tagline text-[32px] font-bold leading-[1.25] tracking-[0.32px] text-footer-text">
+        Upgrade your guest experience
+      </p>
+
+      <div class="flex flex-col items-start gap-4">
+        <div class="footer-social-list flex items-center gap-6">
+          {social.map((s) => (
+            <a href={s.href} aria-label={s.label} class={`footer-social-link footer-social-${s.label.toLowerCase()}`}>
+              <img src={s.icon} alt="" aria-hidden="true" class="h-6 w-6" />
+            </a>
+          ))}
+        </div>
+        <a
+          href="mailto:info@eroomsuite.com"
+          class="footer-email-link text-2xl font-medium leading-[1.3] text-footer-text"
+        >
+          info@eroomsuite.com
+        </a>
+      </div>
+
+      <p class="footer-legal-mobile w-full whitespace-pre-wrap text-center text-sm leading-[1] text-footer-text">
+        {"All Rights Reserved © eRoom Suite 2026 "}<br />
+        Powered by Jacidi.com
+      </p>
     </div>
-    <p>All rights reserved © eRoom Suite 2022 - Powered by Jacidi.com</p>
   </div>
 
-  <img
-    src="/svg/eroom-suite-wordmark.svg"
-    alt="eRoom Suite"
-    class="mt-4 h-auto w-full max-w-[1440px]"
-  />
+  {/* Tablet / desktop (>= sm) — node 4034:328 */}
+  <div class="footer-desktop hidden flex-col gap-6 px-[var(--page-pad-x)] pb-6 pt-24 sm:flex sm:pt-[190px]">
+    <div
+      class="footer-desktop-row flex flex-col items-start justify-between gap-2 text-lg leading-[1.4] text-footer-text sm:flex-row sm:items-center"
+    >
+      {/* footer-links-list (Términos/Política/GDPR) oculto — ver comentario
+          de `links` arriba. */}
+      <p class="footer-legal-desktop text-base text-[#d6d6fabd]">
+        All rights reserved © eRoom Suite 2026 - Powered by <a
+          href="https://jacidi.com" class="footer-jacidi-link">Jacidi.com</a>
+      </p>
+    </div>
+
+    <img
+      src="/svg/eroom-suite-wordmark.svg"
+      alt="eRoom Suite"
+      class="footer-wordmark-desktop mt-4 h-auto w-full max-w-[1440px]"
+    />
+  </div>
 </footer>
 
 <style>

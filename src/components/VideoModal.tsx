@@ -13,10 +13,12 @@ const isDirectVideoFile = (url: string) => /\.(mp4|webm|ogg)(\?.*)?$/i.test(url)
 
 export default function VideoModal() {
   const [detail, setDetail] = useState<Detail | null>(null);
+  const [videoError, setVideoError] = useState(false);
 
   useEffect(() => {
     function onOpen(e: Event) {
       const custom = e as CustomEvent<Detail>;
+      setVideoError(false);
       setDetail(custom.detail);
     }
     window.addEventListener("eroom:open-video", onOpen);
@@ -40,6 +42,7 @@ export default function VideoModal() {
 
   return (
     <div
+      id="video-modal-backdrop"
       className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 p-6 backdrop-blur-sm"
       onClick={() => setDetail(null)}
       role="dialog"
@@ -47,10 +50,12 @@ export default function VideoModal() {
       aria-label={detail.title}
     >
       <div
+        id="video-modal"
         className="relative aspect-video w-full max-w-4xl overflow-hidden rounded-card bg-black shadow-2xl"
         onClick={(e) => e.stopPropagation()}
       >
         <button
+          id="video-modal-close-btn"
           type="button"
           onClick={() => setDetail(null)}
           aria-label="Cerrar video"
@@ -59,11 +64,28 @@ export default function VideoModal() {
           ×
         </button>
 
-        {isDirectVideoFile(detail.url) ? (
+        {videoError ? (
+          // El video es un .mp4 alojado en un host externo (WordPress) —
+          // ver src/data/products.json. Si esa URL cae, cambia o el host
+          // bloquea el hotlink, esto evita dejar el modal en blanco/girando
+          // sin explicación (y evita el error de red suelto en consola).
+          <div className="flex h-full w-full items-center justify-center p-6 text-center text-white/80">
+            No se pudo cargar el video. Probá de nuevo más tarde.
+          </div>
+        ) : isDirectVideoFile(detail.url) ? (
           // eslint-disable-next-line jsx-a11y/media-has-caption
-          <video src={detail.url} controls autoPlay className="h-full w-full" />
+          <video
+            id="video-modal-player"
+            src={detail.url}
+            controls
+            autoPlay
+            preload="metadata"
+            onError={() => setVideoError(true)}
+            className="h-full w-full"
+          />
         ) : (
           <iframe
+            id="video-modal-iframe"
             src={detail.url}
             title={detail.title}
             className="h-full w-full"

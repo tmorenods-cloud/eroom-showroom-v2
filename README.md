@@ -16,7 +16,12 @@ enlaces de PDF/Video/demo sin necesidad de un redeploy.
 
 ## Desarrollo local
 
-Necesitás Node 20+ y Docker (para Postgres local).
+Necesitás Node 20+. Hay dos formas de conectar `DATABASE_URL`:
+
+**Opción A — Postgres local con Docker (recomendada, más rápida).**
+Cada carga de la home hace SSR contra la base (`prerender = false` en
+[src/pages/index.astro](src/pages/index.astro)), así que con Postgres en
+`localhost` la latency es prácticamente cero.
 
 ```bash
 npm install
@@ -28,8 +33,22 @@ npm run db:seed               # carga los 15 productos desde products.json
 npm run dev
 ```
 
-El sitio queda en `http://localhost:4321`, el admin en `/admin` (password
-la que hayas puesto en `ADMIN_PASSWORD`).
+**Opción B — apuntar directo a Supabase (o cualquier Postgres remoto).**
+Sirve para no mantener dos bases sincronizadas, pero cada request de `/`
+paga el round-trip de red hasta el proveedor — en una conexión mala o si el
+pooler está frío, se va a sentir más lento que en local. `src/db/client.ts`
+tiene `connect_timeout: 10`, así que en el peor caso una conexión que no
+responde falla rápido con un error en vez de dejar la página cargando sin
+límite.
+
+```bash
+npm install
+cp .env.example .env          # pegá el DATABASE_URL de Supabase directamente
+npm run dev
+```
+
+En ambos casos el sitio queda en `http://localhost:4321`, el admin en
+`/admin` (password la que hayas puesto en `ADMIN_PASSWORD`).
 
 ## Deploy — demo en Vercel
 

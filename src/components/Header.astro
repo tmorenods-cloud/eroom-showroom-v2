@@ -4,13 +4,13 @@
 
 <!-- Background oculto temporalmente a pedido; para restaurar, volver a agregar:
      bg-gradient-to-t from-header-from via-header-via via-[55.769%] to-header-to -->
-<header class="flex items-center justify-between px-10 py-9">
-  <img src="/svg/eRoom-SUITE-logotype.svg" alt="eRoom Suite" class="h-10 w-auto" />
+<header id="site-header" class="header-bar flex items-center justify-between px-10 py-9">
+  <img src="/svg/eRoom-SUITE-logotype.svg" alt="eRoom Suite" class="header-logo h-10 w-auto" />
   <a
     href="#contacto"
-    class="flex items-center gap-3 text-[28px] leading-none tracking-[-0.56px] text-white"
+    class="header-contact-link flex items-center gap-3 text-[length:var(--header-contact-size)] leading-none tracking-[-0.01em] text-white"
   >
-    <img src="/svg/contacto-icon.svg" alt="" aria-hidden="true" class="h-3 w-2.5" />
+    <img src="/svg/contacto-icon.svg" alt="" aria-hidden="true" class="header-contact-icon h-3 w-2.5" />
     Contacto
   </a>
 </header>
