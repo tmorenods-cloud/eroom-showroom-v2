@@ -21,4 +21,13 @@ export default defineConfig({
   vite: {
     plugins: [tailwindcss()],
   },
+  // Sin esto, el adapter Node/Vercel no confía en el header Host/X-Forwarded-Host
+  // y cae a "localhost" como origin interno. Como el login del admin es un POST
+  // (form real, no fetch), la protección CSRF nativa de Astro (checkOrigin)
+  // compara el Origin del navegador contra ese origin interno, no coinciden,
+  // y bloquea el submit con "Cross-site POST form submissions are forbidden".
+  // Agregar acá cualquier dominio custom que se conecte al proyecto en Vercel.
+  security: {
+    allowedDomains: [{ hostname: "*.vercel.app" }],
+  },
 });
