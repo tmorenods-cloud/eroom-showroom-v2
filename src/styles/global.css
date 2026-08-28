@@ -37,6 +37,31 @@
   --radius-card: 8px;
   --radius-pill-outer: 16px;
   --radius-pill-inner: 12px;
+
+  /*
+   * Paleta del panel admin — deliberadamente separada de los tokens de
+   * arriba: el showroom público usa gradientes azul saturado (header/footer),
+   * pero para el admin (uso interno, de lectura constante) se pidió un gris
+   * neutro con tinte azulado, más cerca de Apple/Notion que del branding de
+   * marketing. El acento interactivo reusa --color-link-active en vez de
+   * definir un azul nuevo, para no duplicar la marca.
+   */
+  --color-admin-bg: #0e1013;
+  --color-admin-surface: #16181d;
+  --color-admin-surface-hover: #1c1f26;
+  --color-admin-surface-2: #1a1d24;
+  --color-admin-border: #262a33;
+  --color-admin-border-hover: #383d49;
+  --color-admin-text: #f4f5f7;
+  --color-admin-text-muted: #9298a6;
+  --color-admin-text-faint: #5b6172;
+  --color-admin-danger: #f87171;
+  --color-admin-success: #4ade80;
+
+  /* Radio más grande que --radius-card (8px, pensado para las tarjetas del
+     showroom público) — paneles y tarjetas del admin quieren un aire más
+     "app moderna" (Notion/Apple rondan 16-20px). */
+  --radius-admin-panel: 20px;
 }
 
 /*

@@ -1,5 +1,5 @@
 ---
-import BaseLayout from "../../../layouts/BaseLayout.astro";
+import AdminLayout from "../../../layouts/AdminLayout.astro";
 import ProductEditForm from "../../../components/admin/ProductEditForm";
 import { getProductById } from "../../../data/products";
 
@@ -13,10 +13,20 @@ if (!product) {
 }
 ---
 
-<BaseLayout title={`Editar ${product.titulo} — Admin`}>
+<AdminLayout title={`Editar ${product.titulo} — Admin`}>
   <main class="mx-auto flex max-w-2xl flex-col gap-8 px-6 py-16">
-    <a href="/admin" class="text-sm text-footer-text">← Volver al panel</a>
-    <h1 class="text-2xl font-medium text-white">{product.titulo}</h1>
+    <a
+      href="/admin"
+      class="inline-flex w-fit items-center gap-1.5 text-sm text-admin-text-muted transition-colors hover:text-admin-text"
+    >
+      ← Volver al panel
+    </a>
+
+    <div class="flex flex-col gap-1">
+      <p class="text-xs font-medium uppercase tracking-wide text-admin-text-faint">Editando producto</p>
+      <h1 class="text-2xl font-medium text-admin-text">{product.titulo}</h1>
+    </div>
+
     <ProductEditForm client:load product={product} />
   </main>
-</BaseLayout>
+</AdminLayout>

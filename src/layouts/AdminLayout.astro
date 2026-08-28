@@ -1,0 +1,21 @@
+---
+import BaseLayout from "./BaseLayout.astro";
+
+/**
+ * Envoltorio de tema para todas las páginas del admin. Pinta el fondo/texto
+ * base con la paleta gris-azulada propia del panel (ver tokens --color-admin-*
+ * en src/styles/global.css) sin tocar el `body{}` global, que sigue sirviendo
+ * al showroom público con su fondo azul de marca.
+ */
+interface Props {
+  title: string;
+}
+
+const { title } = Astro.props;
+---
+
+<BaseLayout title={title}>
+  <div class="min-h-screen bg-admin-bg text-admin-text">
+    <slot />
+  </div>
+</BaseLayout>

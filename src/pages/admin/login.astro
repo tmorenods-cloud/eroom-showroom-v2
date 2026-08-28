@@ -1,38 +1,43 @@
 ---
-import BaseLayout from "../../layouts/BaseLayout.astro";
+import AdminLayout from "../../layouts/AdminLayout.astro";
 
 export const prerender = false;
 
 const hasError = Astro.url.searchParams.has("error");
 ---
 
-<BaseLayout title="Ingresar — Admin eRoom Suite">
-  <main class="mx-auto flex min-h-screen max-w-sm flex-col justify-center gap-8 px-6">
-    <div class="flex flex-col gap-2">
-      <img src="/svg/eRoom-SUITE-logotype.svg" alt="eRoom Suite" class="h-8 w-auto" />
-      <h1 class="text-2xl font-medium text-white">Panel admin</h1>
+<AdminLayout title="Ingresar — Admin eRoom Suite">
+  <main class="mx-auto flex min-h-screen max-w-sm flex-col justify-center px-6">
+    <div class="flex flex-col gap-8 rounded-admin-panel border border-admin-border bg-admin-surface p-8 shadow-2xl shadow-black/40">
+      <div class="flex flex-col items-center gap-3 text-center">
+        <img src="/svg/eRoom-SUITE-logotype.svg" alt="eRoom Suite" class="h-7 w-auto" />
+        <div class="flex flex-col gap-1">
+          <h1 class="text-lg font-medium text-admin-text">Panel admin</h1>
+          <p class="text-sm text-admin-text-muted">Ingresá la contraseña para continuar</p>
+        </div>
+      </div>
+
+      <form method="POST" action="/api/admin/login" class="flex flex-col gap-4">
+        <label class="flex flex-col gap-2 text-sm text-admin-text-muted">
+          Contraseña
+          <input
+            type="password"
+            name="password"
+            required
+            autofocus
+            class="rounded-pill-inner border border-admin-border bg-admin-surface-2 px-4 py-3 text-admin-text outline-none transition-colors focus:border-link-active"
+          />
+        </label>
+
+        {hasError && <p class="text-sm text-admin-danger">Contraseña incorrecta. Probá de nuevo.</p>}
+
+        <button
+          type="submit"
+          class="rounded-pill-inner bg-link-active px-4 py-3 text-center font-medium text-white transition-opacity hover:opacity-90"
+        >
+          Entrar
+        </button>
+      </form>
     </div>
-
-    <form method="POST" action="/api/admin/login" class="flex flex-col gap-4">
-      <label class="flex flex-col gap-2 text-sm text-white">
-        Password
-        <input
-          type="password"
-          name="password"
-          required
-          autofocus
-          class="rounded-pill-inner border border-white/15 bg-white/5 px-4 py-3 text-white outline-none focus:border-white/40"
-        />
-      </label>
-
-      {hasError && <p class="text-sm text-red-400">Password incorrecto. Probá de nuevo.</p>}
-
-      <button
-        type="submit"
-        class="rounded-pill-inner bg-white px-4 py-3 text-center font-medium text-ink"
-      >
-        Entrar
-      </button>
-    </form>
   </main>
-</BaseLayout>
+</AdminLayout>

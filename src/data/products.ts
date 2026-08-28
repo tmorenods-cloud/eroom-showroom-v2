@@ -86,6 +86,9 @@ export type ProductUpdateInput = {
   descripcion: string;
   pdfUrl: string;
   videoUrl: string;
+  categoria: Categoria;
+  orden: number;
+  imagen: string;
   demos: Demo[];
 };
 
@@ -97,6 +100,9 @@ export async function updateProduct(id: string, data: ProductUpdateInput): Promi
       descripcion: data.descripcion,
       pdfUrl: data.pdfUrl,
       videoUrl: data.videoUrl,
+      categoria: data.categoria,
+      orden: data.orden,
+      imagen: data.imagen,
     })
     .where(eq(productsTable.id, id));
 
