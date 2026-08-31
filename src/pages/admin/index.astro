@@ -1,14 +1,16 @@
 ---
 import AdminLayout from "../../layouts/AdminLayout.astro";
+import SectionTitlesForm from "../../components/admin/SectionTitlesForm";
 import { getAllProducts } from "../../data/products";
+import { getSectionTitles } from "../../data/settings";
 import type { Categoria, Product } from "../../data/types";
 
 export const prerender = false;
 
-const productos = await getAllProducts();
+const [productos, sectionTitles] = await Promise.all([getAllProducts(), getSectionTitles()]);
 const categoriaLabel: Record<Categoria, string> = {
-  hotelero: "Hoteleros",
-  huesped: "Huéspedes",
+  hotelero: "Huéspedes",
+  huesped: "Hoteleros",
 };
 const secciones: { categoria: Categoria; productos: Product[] }[] = (
   ["hotelero", "huesped"] as Categoria[]
@@ -41,6 +43,8 @@ const secciones: { categoria: Categoria; productos: Product[] }[] = (
       Editá título, descripción, categoría, orden, imagen, enlaces de demo y los botones de
       PDF/Video de cada tarjeta. Los cambios se ven en la web al instante, sin redeploy.
     </p>
+
+    <SectionTitlesForm titles={sectionTitles} client:load />
 
     {
       secciones.map((seccion) => (

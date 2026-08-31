@@ -17,8 +17,8 @@ el código (`grep -rn "nombre" src/`).
 | Nombre | Elemento |
 |---|---|
 | `#main-content` | `<main>` de la home |
-| `#section-hoteleros` | sección "Herramientas para hoteleros" |
-| `#section-huespedes` | sección "Herramientas para huéspedes" |
+| `#section-hoteleros` | sección "Herramientas para huéspedes" (productos categoría `hotelero`) |
+| `#section-huespedes` | sección "Herramientas para hoteleros" (productos categoría `huesped`) |
 | `.product-grid` | grilla de tarjetas (una por sección) |
 | `.section-title` | título `<h2>` de cada sección |
 

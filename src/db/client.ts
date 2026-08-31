@@ -11,9 +11,20 @@ if (!connectionString) {
   );
 }
 
-// max:1 — este showroom es de tráfico bajo; un pool chico evita agotar el
-// límite de conexiones simultáneas de un Postgres gratuito (Supabase, etc.).
+// max:3 — este showroom es de tráfico bajo así que el pool se mantiene
+// chico, pero NO puede ser 1: varias páginas (home, /admin) ahora disparan
+// más de un query en paralelo (Promise.all, ej. getAllProducts +
+// getSectionTitles). Con max:1 esos queries concurrentes se pipelinean
+// sobre la única conexión contra el pooler de Supabase (pgbouncer,
+// transaction mode, puerto 6543) y el pipeline queda colgado sin error ni
+// timeout — la request nunca resuelve. Con max:3 cada cadena de queries
+// concurrente toma su propia conexión física y no compite por la misma.
 // Subilo si el tráfico lo justifica.
+//
+// fetch_types:false — evita que postgres.js dispare su query interna de
+// introspección de tipos (contra pg_catalog.pg_type) intercalada con las
+// demás; de más está contra un pooler en transaction mode, donde cada
+// statement puede terminar en un backend distinto.
 //
 // idle_timeout:20 — el pooler de Supabase (pgbouncer, puerto 6543) cierra por
 // su cuenta las conexiones inactivas. Sin esto, postgres.js mantiene vivo un
@@ -26,6 +37,12 @@ if (!connectionString) {
 // la request colgada sin límite: la carga de "/" nunca resuelve y el
 // navegador se queda girando indefinidamente. Con el timeout, en el peor
 // caso falla rápido con un error visible en vez de tildarse.
-const client = postgres(connectionString, { prepare: false, max: 1, idle_timeout: 20, connect_timeout: 10 });
+const client = postgres(connectionString, {
+  prepare: false,
+  fetch_types: false,
+  max: 3,
+  idle_timeout: 20,
+  connect_timeout: 10,
+});
 
 export const db = drizzle(client, { schema });

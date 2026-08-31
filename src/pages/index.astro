@@ -6,6 +6,7 @@ import SectionTitle from "../components/SectionTitle.astro";
 import ProductCard from "../components/ProductCard.tsx";
 import VideoModal from "../components/VideoModal.tsx";
 import { getAllProducts } from "../data/products";
+import { getSectionTitles } from "../data/settings";
 
 // El contenido vive en Postgres y se edita desde /admin — sin esto, un
 // cambio en el admin no se vería hasta el próximo build.
@@ -13,8 +14,9 @@ export const prerender = false;
 
 // Una sola llamada (2 queries) en vez de una por categoría — ver el
 // comentario en fetchProductsWithDemos sobre por qué importa contra un
-// Postgres remoto.
-const productos = await getAllProducts();
+// Postgres remoto. Los títulos de sección se traen en paralelo, no
+// dependen de los productos.
+const [productos, sectionTitles] = await Promise.all([getAllProducts(), getSectionTitles()]);
 const hoteleros = productos.filter((p) => p.categoria === "hotelero");
 const huespedes = productos.filter((p) => p.categoria === "huesped");
 ---
@@ -24,14 +26,14 @@ const huespedes = productos.filter((p) => p.categoria === "huesped");
 
   <main id="main-content" class="mx-auto flex max-w-[1920px] flex-col gap-24 px-[var(--page-pad-x)] py-16">
     <section id="section-hoteleros" class="flex flex-col gap-12">
-      <SectionTitle text="Herramientas para hoteleros" />
+      <SectionTitle text={sectionTitles.hotelero} />
       <div class="product-grid grid grid-cols-1 gap-x-4 gap-y-11 sm:grid-cols-2 xl:grid-cols-3">
         {hoteleros.map((product) => <ProductCard product={product} client:visible />)}
       </div>
     </section>
 
     <section id="section-huespedes" class="flex flex-col gap-12">
-      <SectionTitle text="Herramientas para huéspedes" />
+      <SectionTitle text={sectionTitles.huesped} />
       <div class="product-grid grid grid-cols-1 gap-x-4 gap-y-11 sm:grid-cols-2 xl:grid-cols-3">
         {huespedes.map((product) => <ProductCard product={product} client:visible />)}
       </div>

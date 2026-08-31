@@ -4,8 +4,8 @@ import type { Categoria, Demo, Product } from "../../data/types";
 type SaveState = "idle" | "saving" | "saved" | "error";
 
 const categoriaLabel: Record<Categoria, string> = {
-  hotelero: "Hotelero",
-  huesped: "Huésped",
+  hotelero: "Huésped",
+  huesped: "Hotelero",
 };
 
 const inputClass =

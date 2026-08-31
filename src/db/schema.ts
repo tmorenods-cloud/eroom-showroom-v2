@@ -29,3 +29,13 @@ export const demos = pgTable("demos", {
   url: text("url").notNull(),
   orden: integer("orden").notNull().default(0),
 });
+
+/**
+ * Textos editables sueltos de la home que no pertenecen a ningún producto
+ * (hoy: los dos títulos de sección). Key/value en vez de columnas fijas para
+ * poder sumar otro texto editable a futuro sin migración nueva.
+ */
+export const siteSettings = pgTable("site_settings", {
+  key: text("key").primaryKey(),
+  value: text("value").notNull(),
+});
