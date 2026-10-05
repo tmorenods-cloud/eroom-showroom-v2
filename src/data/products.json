@@ -32,8 +32,8 @@
           "url": "https://desk.uat.eroomsuite.com/"
         }
       ],
-      "pdfUrl": "https://showroom.eroomsuite.com/wp-content/uploads/2025/01/eRoom-Butler-2026.pdf",
-      "videoUrl": "https://showroom.eroomsuite.com/wp-content/uploads/2025/01/eRoom-Butler-Desk.mp4"
+      "pdfUrl": "/media/eRoom-Butler-2026.pdf",
+      "videoUrl": "/media/eRoom-Butler-Desk.mp4"
     },
     {
       "id": "hotspot",
@@ -56,8 +56,8 @@
           "url": "https://hotspot.eroomsuite.com/admin/dashboard/realtime"
         }
       ],
-      "pdfUrl": "https://showroom.eroomsuite.com/wp-content/uploads/2025/01/eRoom-Hotspot-2026.pdf",
-      "videoUrl": "https://showroom.eroomsuite.com/wp-content/uploads/2024/01/EROOM-HOTSPOT_1_1.mp4"
+      "pdfUrl": "/media/eRoom-Hotspot-2026.pdf",
+      "videoUrl": "/media/EROOM-HOTSPOT_1_1.mp4"
     },
     {
       "id": "tv",
@@ -76,7 +76,7 @@
           "url": "https://tv.eroomsuite.com/dashboard"
         }
       ],
-      "pdfUrl": "https://showroom.eroomsuite.com/wp-content/uploads/2025/01/eRoom-TV-2026.pdf",
+      "pdfUrl": "/media/eRoom-TV-2026.pdf",
       "videoUrl": ""
     },
     {
@@ -92,7 +92,7 @@
           "url": "https://cartas.eroomsuite.com/"
         }
       ],
-      "pdfUrl": "https://showroom.eroomsuite.com/wp-content/uploads/2025/01/Cartas-Digitales.pdf",
+      "pdfUrl": "/media/Cartas-Digitales.pdf",
       "videoUrl": ""
     },
     {
@@ -108,8 +108,8 @@
           "url": "https://chatgpt.qa.eroomsuite.com/"
         }
       ],
-      "pdfUrl": "https://showroom.eroomsuite.com/wp-content/uploads/2025/01/eRoom-Chat-1.pdf",
-      "videoUrl": "https://showroom.eroomsuite.com/wp-content/uploads/2024/01/CHAT_1.mp4"
+      "pdfUrl": "/media/eRoom-Chat-1.pdf",
+      "videoUrl": "/media/CHAT_1.mp4"
     },
     {
       "id": "cdp-crm",
@@ -128,8 +128,8 @@
           "url": "https://crm.eroomsuite.com"
         }
       ],
-      "pdfUrl": "https://showroom.eroomsuite.com/wp-content/uploads/2025/01/eRoom-CDP_CRM-2026.pdf",
-      "videoUrl": "https://showroom.eroomsuite.com/wp-content/uploads/2025/01/eRoom-CDP_CRM.mp4"
+      "pdfUrl": "/media/eRoom-CDP_CRM-2026.pdf",
+      "videoUrl": "/media/eRoom-CDP_CRM.mp4"
     },
     {
       "id": "pms",
@@ -144,8 +144,8 @@
           "url": "https://pms.eroomsuite.com/"
         }
       ],
-      "pdfUrl": "https://showroom.eroomsuite.com/wp-content/uploads/2024/01/eRoom-PMS.pdf",
-      "videoUrl": "https://showroom.eroomsuite.com/wp-content/uploads/2024/01/EROOM-PMS2_1.mp4"
+      "pdfUrl": "/media/eRoom-PMS.pdf",
+      "videoUrl": "/media/EROOM-PMS2_1.mp4"
     },
     {
       "id": "signage",
@@ -160,8 +160,8 @@
           "url": "https://signage.eroomsuite.com/"
         }
       ],
-      "pdfUrl": "https://showroom.eroomsuite.com/wp-content/uploads/2025/01/eRoom-Signage-2026.pdf",
-      "videoUrl": "https://showroom.eroomsuite.com/wp-content/uploads/2024/01/EROOM-SIGNAGE_1_1.mp4"
+      "pdfUrl": "/media/eRoom-Signage-2026.pdf",
+      "videoUrl": "/media/EROOM-SIGNAGE_1_1.mp4"
     },
     {
       "id": "erestaurant",
@@ -171,7 +171,7 @@
       "descripcion": "eRestaurant te permite gestionar las transacciones hechas por tus clientes en tu negocio de forma autónoma, ágil y rápida.",
       "imagen": "/img/erestaurant-mockup-card-10.webp",
       "demos": [],
-      "pdfUrl": "https://showroom.eroomsuite.com/wp-content/uploads/2024/01/eRestaurant.pdf",
+      "pdfUrl": "/media/eRestaurant.pdf",
       "videoUrl": ""
     },
     {
@@ -187,8 +187,8 @@
           "url": "https://bi.eroomsuite.com/"
         }
       ],
-      "pdfUrl": "https://showroom.eroomsuite.com/wp-content/uploads/2025/01/eRoom-BI.pdf",
-      "videoUrl": "https://showroom.eroomsuite.com/wp-content/uploads/2025/01/Eroom-Video-Bi.mp4"
+      "pdfUrl": "/media/eRoom-BI.pdf",
+      "videoUrl": "/media/Eroom-Video-Bi.mp4"
     },
     {
       "id": "assistant",
@@ -198,7 +198,7 @@
       "descripcion": "eRoom Assistant es la solución más avanzada del mercado para ahorrar costes en suministros mediante controles de presencia y un algoritmo de eficiencia.",
       "imagen": "/img/assistant-mockup-card-9.webp",
       "demos": [],
-      "pdfUrl": "https://showroom.eroomsuite.com/wp-content/uploads/2024/01/eRoom-Assistant.pdf",
+      "pdfUrl": "/media/eRoom-Assistant.pdf",
       "videoUrl": ""
     },
     {
@@ -209,8 +209,8 @@
       "descripcion": "eRoom Network Solutions despliega ecosistemas de red desde arquitecturas GPON hasta entornos de ciberseguridad avanzada diseñados para la alta demanda operativa de un hotel moderno.",
       "imagen": "/img/network-mockup-card-13.webp",
       "demos": [],
-      "pdfUrl": "https://showroom.eroomsuite.com/wp-content/uploads/2025/01/eRoom-Network-Solutions-2026.pdf",
-      "videoUrl": "https://showroom.eroomsuite.com/wp-content/uploads/2025/01/eRoom-Ns-2025.mp4"
+      "pdfUrl": "/media/eRoom-Network-Solutions-2026.pdf",
+      "videoUrl": "/media/eRoom-Ns-2025.mp4"
     },
     {
       "id": "erp",
@@ -220,7 +220,7 @@
       "descripcion": "Automatiza y gestiona todos los procesos operativos de tu negocio en un solo lugar.",
       "imagen": "/img/erp-mockup-card-14.webp",
       "demos": [],
-      "pdfUrl": "https://showroom.eroomsuite.com/wp-content/uploads/2024/01/eRoom_ERP.pdf",
+      "pdfUrl": "/media/eRoom_ERP.pdf",
       "videoUrl": ""
     },
     {
@@ -231,7 +231,7 @@
       "descripcion": "eRoom HUB es la herramienta On Cloud que te permite conectar tus aplicaciones de terceros con el universo de soluciones eRoom para una colaboración más rápida, sencilla y segura.",
       "imagen": "/img/mockup-hub-card-12.webp",
       "demos": [],
-      "pdfUrl": "https://showroom.eroomsuite.com/wp-content/uploads/2024/01/eRoom-HUB.pdf",
+      "pdfUrl": "/media/eRoom-HUB.pdf",
       "videoUrl": ""
     },
     {
@@ -242,7 +242,7 @@
       "descripcion": "Con eRoom DAM podrás organizar y encontrar tus documentos fácilmente, controlar los accesos, automatizar el trabajo en línea.",
       "imagen": "/img/dam-mockup-card-15.webp",
       "demos": [],
-      "pdfUrl": "https://showroom.eroomsuite.com/wp-content/uploads/2024/01/eRoom-DAM.pdf",
+      "pdfUrl": "/media/eRoom-DAM.pdf",
       "videoUrl": ""
     }
   ]

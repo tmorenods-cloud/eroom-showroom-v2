@@ -10,8 +10,7 @@ el código (`grep -rn "nombre" src/`).
 |---|---|
 | `#site-header` | `<header>` completo |
 | `.header-logo` | logo eRoom Suite |
-| `.header-contact-link` | link "Contacto" |
-| `.header-contact-icon` | ícono del link de contacto |
+| `.header-tagline` | tagline "Upgrade your guest experience" (reemplaza al link "Contacto", oculto) |
 
 ## Sección de producto — [SectionTitle.astro](../src/components/SectionTitle.astro), [index.astro](../src/pages/index.astro)
 | Nombre | Elemento |

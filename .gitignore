@@ -19,3 +19,6 @@ npm-debug.log*
 # reemplazo local de Postgres sin Docker (ver README para el real)
 .local-pg-server.mjs
 .local-pg-data/
+
+# Backups de WordPress (WP Staging) — no versionar
+*.wpstg

@@ -1,0 +1,35 @@
+---
+// MailLink.astro — enlace mailto con el correo ofuscado. El HTML publicado no
+// contiene la dirección en texto plano (ni en href ni en el texto): va como
+// base64 del string invertido, y recién se decodifica cuando la persona hace
+// clic. Un bot que lee el HTML — o que incluso lo renderiza con JS pero no
+// hace clic — nunca ve el correo.
+//
+// Uso:
+//   <MailLink class="...">Contacto</MailLink>   → texto fijo
+//   <MailLink class="..." showAddress />         → "Escríbenos"; tras el clic
+//                                                   muestra el correo como texto
+import site from "../data/site.json";
+import type { HTMLAttributes } from "astro/types";
+
+type Props = HTMLAttributes<"a"> & { showAddress?: boolean };
+
+const { showAddress = false, ...attrs } = Astro.props;
+const encoded = btoa([...site.contactEmail].reverse().join(""));
+---
+
+<a href="#" data-mail={encoded} data-mail-text={showAddress ? "" : undefined} {...attrs}>
+  {showAddress ? "Escríbenos" : <slot />}
+</a>
+
+<script>
+  document.addEventListener("click", (e) => {
+    const el = (e.target as Element).closest<HTMLAnchorElement>("a[data-mail]");
+    if (!el) return;
+    e.preventDefault();
+    const email = [...atob(el.dataset.mail!)].reverse().join("");
+    el.href = `mailto:${email}`;
+    if (el.dataset.mailText !== undefined) el.textContent = email;
+    window.location.href = el.href;
+  });
+</script>

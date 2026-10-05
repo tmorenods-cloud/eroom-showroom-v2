@@ -10,6 +10,7 @@
 //   { label: "Política de privacidad", href: "/politica-de-privacidad" },
 //   { label: "GDPR", href: "/gdpr" },
 // ];
+import MailLink from "./MailLink.astro";
 
 const social = [
   { label: "Instagram", href: "https://www.instagram.com/eroomsuite/", icon: "/svg/instagram-line.svg" },
@@ -36,12 +37,7 @@ const social = [
             </a>
           ))}
         </div>
-        <a
-          href="mailto:info@eroomsuite.com"
-          class="footer-email-link text-2xl font-medium leading-[1.3] text-footer-text"
-        >
-          info@eroomsuite.com
-        </a>
+        <MailLink showAddress class="footer-email-link text-2xl font-medium leading-[1.3] text-footer-text" />
       </div>
 
       <p class="footer-legal-mobile w-full whitespace-pre-wrap text-center text-sm leading-[1] text-footer-text">
