@@ -8,15 +8,9 @@ import VideoModal from "../components/VideoModal.tsx";
 import { getAllProducts } from "../data/products";
 import { getSectionTitles } from "../data/settings";
 
-// El contenido vive en Postgres y se edita desde /admin — sin esto, un
-// cambio en el admin no se vería hasta el próximo build.
-export const prerender = false;
-
-// Una sola llamada (2 queries) en vez de una por categoría — ver el
-// comentario en fetchProductsWithDemos sobre por qué importa contra un
-// Postgres remoto. Los títulos de sección se traen en paralelo, no
-// dependen de los productos.
-const [productos, sectionTitles] = await Promise.all([getAllProducts(), getSectionTitles()]);
+// Página 100% estática: el contenido sale de src/data/*.json en build.
+const productos = getAllProducts();
+const sectionTitles = getSectionTitles();
 const hoteleros = productos.filter((p) => p.categoria === "hotelero");
 const huespedes = productos.filter((p) => p.categoria === "huesped");
 ---

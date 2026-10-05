@@ -1,5 +1,5 @@
 {
-  "_fuente": "Contenido combinado: copy (titulo/descripcion) extraido de Figma (fileKey HNFYCrcZXAX6GVUEmwlzWb), enlaces demo/pdf/video extraidos del HTML real de https://showroom.eroomsuite.com/ (WP REST API, pagina id 7) el 2026-08-26. Imagenes locales tomadas de /img (provistas por el usuario).",
+  "_fuente": "Contenido combinado: copy (titulo/descripcion) extraido de Figma (fileKey HNFYCrcZXAX6GVUEmwlzWb), enlaces demo/pdf/video extraidos del HTML real de https://showroom.eroomsuite.com/ (WP REST API, pagina id 7) el 2026-08-26. Imagenes locales tomadas de /img (provistas por el usuario). 2026-10-05: verificado identico a la BD de Supabase al migrar a sitio estatico; desde entonces ESTE archivo es la fuente de verdad (ver docs/HANDOFF.md).",
   "_pendiente": [
     "Confirmar si se incluye la tarjeta extra 'Cast' (name: 'Cooming Soon') detectada en el sitio en vivo pero ausente en el Figma actual.",
     "5 productos (eRestaurant, Assistant, ERP, HUB, DAM) solo tienen PDF en el sitio en vivo; sin demos ni video todavia.",
